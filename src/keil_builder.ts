@@ -1,4 +1,4 @@
-import { error } from "@actions/core"
+import { error } from '@actions/core'
 
 const KeilCompilerPath = 'C:\\Keil_v5\\UV4\\UV4.exe'
 
@@ -21,9 +21,9 @@ export function KeilBuildProject(
   target_name: string
 ): void {
   const cmdShell = require('node-cmd')
-  
+
   let process_obj = cmdShell.run(
-    `start /wait ${KeilCompilerPath} -j0 -cr ${project_name} -t ${target_name}`,
+    `${KeilCompilerPath} -j0 -cr ${project_name} -t ${target_name}`,
     CallBack
   )
 

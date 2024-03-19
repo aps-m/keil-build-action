@@ -24761,16 +24761,16 @@ exports["default"] = _default;
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.KeilBuildProject = void 0;
-const KeilCompilerPath = 'Compiler=C:\\Keil_v5\\UV4\\UV4.exe';
+const KeilCompilerPath = 'C:\\Keil_v5\\UV4\\UV4.exe';
 function CallBack(err, data, stderr) {
     if (err) {
-        err = '';
+        console.log(err);
     }
     if (data) {
-        data = '';
+        console.log(data);
     }
     if (stderr) {
-        stderr = '';
+        console.log(stderr);
     }
 }
 function KeilBuildProject(project_name, target_name) {
@@ -24825,7 +24825,7 @@ async function run() {
     try {
         const project_name = core.getInput('project_name');
         const target_name = core.getInput('target_name');
-        (0, keil_builder_1.KeilBuildProject)(project_name, target_name);
+        await (0, keil_builder_1.KeilBuildProject)(project_name, target_name);
         // const ms: string = core.getInput('milliseconds')
     }
     catch (error) {
