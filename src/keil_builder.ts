@@ -1,12 +1,20 @@
-import { error } from '@actions/core'
+import * as core from '@actions/core'
 
 const KeilCompilerPath = 'C:\\Keil_v5\\UV4\\UV4.exe'
 
-function CallBack(err: string, data: string, stderr: string): void {
+//const KeilCompilerPath = 'ResGen'
+
+function CallBack(err: any, data: string, stderr: string): void {
   if (err) {
     console.log('Error output:')
     console.log(err)
     console.log('End error output')
+
+    console.log(`Error code: ${err.code}`)
+
+    if (Number(err.code) > 0) {
+      core.setFailed(err.stack)
+    }
   }
 
   if (data) {
@@ -39,3 +47,5 @@ export function KeilBuildProject(
     console.log('End log item output')
   })
 }
+
+//KeilBuildProject('test', 'test')
