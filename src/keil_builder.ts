@@ -21,7 +21,7 @@ export function KeilBuildProject(
   const cmdShell = require('node-cmd')
   
   let process_obj = cmdShell.run(
-    `start ${KeilCompilerPath} -j0 -cr ${project_name} -t ${target_name}`,
+    `start \\wait ${KeilCompilerPath} -j0 -cr ${project_name} -t ${target_name}`,
     CallBack
   )
 
