@@ -1,23 +1,23 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Keil build'
+description: 'Build keil project'
+author: 'APS'
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
-branding:
-  icon: 'heart'
-  color: 'red'
+# branding:
+#   icon: 'heart'
+#   color: 'red'
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  project_name:
+    description: 'Name of project'
     required: true
-    default: '1000'
+    default: ''
 
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+  target_name:
+    description: 'Name of build target'
+    required: true
+    default: ''
 
 runs:
   using: node20

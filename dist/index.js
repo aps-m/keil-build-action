@@ -1834,6 +1834,55 @@ function isLoopbackAddress(host) {
 
 /***/ }),
 
+/***/ 3748:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const { exec, execSync } = __nccwpck_require__(2081); 
+
+const commandline={
+    run:runCommand,
+    runSync:runSync,
+};
+
+function runCommand(command,callback){
+    
+    return exec(
+        command,
+        (
+            function(){
+                return function(err,data,stderr){
+                    if(!callback)
+                        return;
+
+                    callback(err, data, stderr);
+                }
+            }
+        )(callback)
+    );
+}
+
+function runSync(command){
+    try {
+        return { 
+            data:   execSync(command).toString(), 
+            err:    null, 
+            stderr: null 
+        }
+    } 
+    catch (error) {
+        return { 
+            data:   null, 
+            err:    error.stderr.toString(), 
+            stderr: error.stderr.toString() 
+        }
+    }
+}
+
+module.exports=commandline;
+
+
+/***/ }),
+
 /***/ 4294:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -24705,6 +24754,37 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 4627:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.KeilBuildProject = void 0;
+const KeilCompilerPath = 'Compiler=C:\\Keil_v5\\UV4\\UV4.exe';
+function CallBack(err, data, stderr) {
+    if (err) {
+        err = '';
+    }
+    if (data) {
+        data = '';
+    }
+    if (stderr) {
+        stderr = '';
+    }
+}
+function KeilBuildProject(project_name, target_name) {
+    const cmdShell = __nccwpck_require__(3748);
+    let process_obj = cmdShell.run(`${KeilCompilerPath} -j0 -cr ${project_name} -t ${target_name}`, CallBack);
+    process_obj.stdout.on('data', function (log_item) {
+        console.log(log_item);
+    });
+}
+exports.KeilBuildProject = KeilBuildProject;
+
+
+/***/ }),
+
 /***/ 399:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -24736,22 +24816,17 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const wait_1 = __nccwpck_require__(5259);
+const keil_builder_1 = __nccwpck_require__(4627);
 /**
  * The main function for the action.
  * @returns {Promise<void>} Resolves when the action is complete.
  */
 async function run() {
     try {
-        const ms = core.getInput('milliseconds');
-        // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-        core.debug(`Waiting ${ms} milliseconds ...`);
-        // Log the current timestamp, wait, then log the new timestamp
-        core.debug(new Date().toTimeString());
-        await (0, wait_1.wait)(parseInt(ms, 10));
-        core.debug(new Date().toTimeString());
-        // Set outputs for other workflow steps to use
-        core.setOutput('time', new Date().toTimeString());
+        const project_name = core.getInput('project_name');
+        const target_name = core.getInput('target_name');
+        (0, keil_builder_1.KeilBuildProject)(project_name, target_name);
+        // const ms: string = core.getInput('milliseconds')
     }
     catch (error) {
         // Fail the workflow run if an error occurs
@@ -24760,31 +24835,6 @@ async function run() {
     }
 }
 exports.run = run;
-
-
-/***/ }),
-
-/***/ 5259:
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.wait = void 0;
-/**
- * Wait for a number of milliseconds.
- * @param milliseconds The number of milliseconds to wait.
- * @returns {Promise<string>} Resolves with 'done!' after the wait is over.
- */
-async function wait(milliseconds) {
-    return new Promise(resolve => {
-        if (isNaN(milliseconds)) {
-            throw new Error('milliseconds not a number');
-        }
-        setTimeout(() => resolve('done!'), milliseconds);
-    });
-}
-exports.wait = wait;
 
 
 /***/ }),
@@ -24810,6 +24860,14 @@ module.exports = require("async_hooks");
 
 "use strict";
 module.exports = require("buffer");
+
+/***/ }),
+
+/***/ 2081:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
 
 /***/ }),
 
