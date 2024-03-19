@@ -7,7 +7,7 @@ const LogFileName = 'build_output.txt'
 //const KeilCompilerPath = 'ResGen'
 
 function CallBack(err: any, data: string, stderr: string): void {
-  const file_content = fs.readFileSync(LogFileName, 'utf-8')
+  const file_content = fs.readFileSync(`MDK-ARM/${LogFileName}`, 'utf-8')
 
   console.log('Build log:')
   console.log(file_content)
