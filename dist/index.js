@@ -24786,11 +24786,12 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.KeilBuildProject = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const fs = __importStar(__nccwpck_require__(7147));
+const path = __importStar(__nccwpck_require__(1017));
 const KeilCompilerPath = 'C:\\Keil_v5\\UV4\\UV4.exe';
 const LogFileName = 'build_output.txt';
-//const KeilCompilerPath = 'ResGen'
+let LogDirName = '';
 function CallBack(err, data, stderr) {
-    const file_content = fs.readFileSync(`MDK-ARM/${LogFileName}`, 'utf-8');
+    const file_content = fs.readFileSync(`${LogDirName}/${LogFileName}`, 'utf-8');
     console.log('Build log:');
     console.log(file_content);
     if (err) {
@@ -24810,6 +24811,7 @@ function CallBack(err, data, stderr) {
 }
 function KeilBuildProject(project_name, target_name) {
     const cmdShell = __nccwpck_require__(3748);
+    LogDirName = path.dirname(project_name);
     let process_obj = cmdShell.run(`${KeilCompilerPath} -j0 -cr ${project_name} -t ${target_name} -o ${LogFileName}`, CallBack);
     process_obj.stdout.on('data', function (log_item) {
         console.log(log_item);
