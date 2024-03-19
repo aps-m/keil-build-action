@@ -1,16 +1,18 @@
+import { error } from "@actions/core"
+
 const KeilCompilerPath = 'C:\\Keil_v5\\UV4\\UV4.exe'
 
 function CallBack(err: string, data: string, stderr: string): void {
   if (err) {
-    err = ''
+    console.log(err)
   }
 
   if (data) {
-    data = ''
+    console.log(data)
   }
 
   if (stderr) {
-    stderr = ''
+    console.log(stderr)
   }
 }
 
