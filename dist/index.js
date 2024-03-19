@@ -24785,36 +24785,34 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.KeilBuildProject = void 0;
 const core = __importStar(__nccwpck_require__(2186));
+const fs = __importStar(__nccwpck_require__(7147));
 const KeilCompilerPath = 'C:\\Keil_v5\\UV4\\UV4.exe';
+const LogFileName = 'build_output.txt';
 //const KeilCompilerPath = 'ResGen'
 function CallBack(err, data, stderr) {
+    const file_content = fs.readFileSync(LogFileName, 'utf-8');
+    console.log('Build log:');
+    console.log(file_content);
     if (err) {
-        console.log('Error output:');
-        console.log(err);
-        console.log('End error output');
-        console.log(`Error code: ${err.code}`);
-        if (Number(err.code) > 0) {
+        if (Number(err.code) > 1) {
+            core.setFailed('Build process error output:');
             core.setFailed(err.stack);
         }
     }
     if (data) {
-        console.log('Data output:');
+        console.log('Build process Data output:');
         console.log(data);
-        console.log('End data output');
     }
     if (stderr) {
-        console.log('Stderr output:');
+        console.log('Build process stderr output:');
         console.log(stderr);
-        console.log('End stderr output');
     }
 }
 function KeilBuildProject(project_name, target_name) {
     const cmdShell = __nccwpck_require__(3748);
-    let process_obj = cmdShell.run(`${KeilCompilerPath} -j0 -cr ${project_name} -t ${target_name}`, CallBack);
+    let process_obj = cmdShell.run(`${KeilCompilerPath} -j0 -cr ${project_name} -t ${target_name} -o ${LogFileName}`, CallBack);
     process_obj.stdout.on('data', function (log_item) {
-        console.log('log item output:');
         console.log(log_item);
-        console.log('End log item output');
     });
 }
 exports.KeilBuildProject = KeilBuildProject;
