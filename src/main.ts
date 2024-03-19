@@ -9,7 +9,7 @@ export async function run(): Promise<void> {
   try {
     const project_name: string = core.getInput('project_name')
     const target_name: string = core.getInput('target_name')
-    await KeilBuildProject(project_name, target_name)
+    KeilBuildProject(project_name, target_name)
 
     // const ms: string = core.getInput('milliseconds')
   } catch (error) {

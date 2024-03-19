@@ -24825,7 +24825,7 @@ async function run() {
     try {
         const project_name = core.getInput('project_name');
         const target_name = core.getInput('target_name');
-        await (0, keil_builder_1.KeilBuildProject)(project_name, target_name);
+        (0, keil_builder_1.KeilBuildProject)(project_name, target_name);
         // const ms: string = core.getInput('milliseconds')
     }
     catch (error) {
