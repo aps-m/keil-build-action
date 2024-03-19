@@ -24764,20 +24764,28 @@ exports.KeilBuildProject = void 0;
 const KeilCompilerPath = 'C:\\Keil_v5\\UV4\\UV4.exe';
 function CallBack(err, data, stderr) {
     if (err) {
+        console.log('Error output:');
         console.log(err);
+        console.log('End error output');
     }
     if (data) {
+        console.log('Data output:');
         console.log(data);
+        console.log('End data output');
     }
     if (stderr) {
+        console.log('Stderr output:');
         console.log(stderr);
+        console.log('End stderr output');
     }
 }
 function KeilBuildProject(project_name, target_name) {
     const cmdShell = __nccwpck_require__(3748);
     let process_obj = cmdShell.run(`${KeilCompilerPath} -j0 -cr ${project_name} -t ${target_name}`, CallBack);
     process_obj.stdout.on('data', function (log_item) {
+        console.log('log item output:');
         console.log(log_item);
+        console.log('End log item output');
     });
 }
 exports.KeilBuildProject = KeilBuildProject;
