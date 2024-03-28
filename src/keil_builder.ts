@@ -38,6 +38,8 @@ export function KeilBuildProject(
 
   LogDirName = path.dirname(project_name)
 
+  console.log('warning: Example message')
+
   let process_obj = cmdShell.run(
     `${KeilCompilerPath} -j0 -cr ${project_name} -t ${target_name} -o ${LogFileName}`,
     CallBack
