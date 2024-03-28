@@ -10,7 +10,21 @@ function CallBack(err: any, data: string, stderr: string): void {
   const file_content = fs.readFileSync(`${LogDirName}/${LogFileName}`, 'utf-8')
 
   console.log('Build log:')
-  console.log(file_content)
+
+  const arr = file_content.split(/\r?\n/)
+
+  // Read file line by line
+  for (let line of arr) {
+    let regex = /[wW]arning:/g
+    let probe = regex.exec(line)
+
+    if (probe) {
+      core.warning(line)
+    } else {
+      console.log(line)
+    }
+  }
+  //console.log(file_content)
 
   if (err) {
     if (Number(err.code) > 1) {
