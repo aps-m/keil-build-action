@@ -24812,7 +24812,7 @@ function CallBack(err, data, stderr) {
 function KeilBuildProject(project_name, target_name) {
     const cmdShell = __nccwpck_require__(3748);
     LogDirName = path.dirname(project_name);
-    console.warn('Example message');
+    console.warn('warning: Example message');
     let process_obj = cmdShell.run(`${KeilCompilerPath} -j0 -cr ${project_name} -t ${target_name} -o ${LogFileName}`, CallBack);
     process_obj.stdout.on('data', function (log_item) {
         console.log(log_item);
