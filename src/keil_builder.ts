@@ -26,7 +26,7 @@ function CallBack(err: any, data: string, stderr: string): void {
 
     if (detail_err) {
       //ErrList.push(line)
-      detail_str = `${detail_str}\r\n${line}`
+      detail_str = `${detail_str} Detail: ${line}`
       core.setFailed(detail_str)
       detail_err = false
       handled = true
@@ -41,7 +41,7 @@ function CallBack(err: any, data: string, stderr: string): void {
     }
 
     if (detail_warn) {
-      detail_str = `${detail_str}\r\n${line}`
+      detail_str = `${detail_str} Detail: ${line}`
       //ErrList.push(line)
       core.warning(detail_str)
       detail_warn = false
