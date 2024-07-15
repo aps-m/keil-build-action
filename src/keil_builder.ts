@@ -14,6 +14,7 @@ function CallBack(err: any, data: string, stderr: string): void {
   const arr = file_content.split(/\r?\n/)
   let detail_warn: boolean = false
   let detail_err: boolean = false
+  let detail_str: string = ''
 
   // Read file line by line
   for (let line of arr) {
@@ -25,27 +26,31 @@ function CallBack(err: any, data: string, stderr: string): void {
 
     if (detail_err) {
       //ErrList.push(line)
-      core.setFailed(line)
+      detail_str = `${detail_str}\r\n${line}`
+      core.setFailed(detail_str)
       detail_err = false
       handled = true
     }
 
     if (probe_error) {
       //ErrList.push(line)
-      core.setFailed(line)
+      //core.setFailed(line)
+      detail_str = line
       detail_err = true
       handled = true
     }
 
     if (detail_warn) {
+      detail_str = `${detail_str}\r\n${line}`
       //ErrList.push(line)
-      core.warning(line)
+      core.warning(detail_str)
       detail_warn = false
       handled = true
     }
 
     if (probe_warning) {
-      core.warning(line)
+      //core.warning(line)
+      detail_str = line
       detail_warn = true
       handled = true
     }
