@@ -24794,9 +24794,6 @@ function CallBack(err, data, stderr) {
     const file_content = fs.readFileSync(`${LogDirName}/${LogFileName}`, 'utf-8');
     console.log('Build log:');
     const arr = file_content.split(/\r?\n/);
-    let detail_warn = false;
-    let detail_err = false;
-    let detail_str = '';
     // Read file line by line
     for (let line of arr) {
         let regex_warning = /[wW]arning:/g;
@@ -24804,44 +24801,21 @@ function CallBack(err, data, stderr) {
         let probe_warning = regex_warning.exec(line);
         let probe_error = regex_error.exec(line);
         let handled = false;
-        if (detail_err) {
-            //ErrList.push(line)
-            detail_str = `${detail_str} Detail: ${line}`;
-            core.setFailed(detail_str);
-            detail_err = false;
-            handled = true;
-        }
         if (probe_error) {
-            //ErrList.push(line)
-            //core.setFailed(line)
-            detail_str = line;
-            detail_err = true;
-            handled = true;
-        }
-        if (detail_warn) {
-            detail_str = `${detail_str} Detail: ${line}`;
-            //ErrList.push(line)
-            core.warning(detail_str);
-            detail_warn = false;
+            core.setFailed(line);
             handled = true;
         }
         if (probe_warning) {
-            //core.warning(line)
-            detail_str = line;
-            detail_warn = true;
+            core.warning(line);
             handled = true;
         }
         if (!handled) {
             console.log(line);
         }
     }
-    //console.log(file_content)
     if (err) {
         if (Number(err.code) > 1) {
-            //core.setFailed('Build error')
-            // for (let err of ErrList) {
-            //   core.setFailed(err)
-            // }
+            console.log('Build finished with errors');
         }
     }
     if (data) {

@@ -12,9 +12,6 @@ function CallBack(err: any, data: string, stderr: string): void {
   console.log('Build log:')
 
   const arr = file_content.split(/\r?\n/)
-  let detail_warn: boolean = false
-  let detail_err: boolean = false
-  let detail_str: string = ''
 
   // Read file line by line
   for (let line of arr) {
@@ -24,34 +21,13 @@ function CallBack(err: any, data: string, stderr: string): void {
     let probe_error = regex_error.exec(line)
     let handled: boolean = false
 
-    if (detail_err) {
-      //ErrList.push(line)
-      detail_str = `${detail_str} Detail: ${line}`
-      core.setFailed(detail_str)
-      detail_err = false
-      handled = true
-    }
-
     if (probe_error) {
-      //ErrList.push(line)
-      //core.setFailed(line)
-      detail_str = line
-      detail_err = true
-      handled = true
-    }
-
-    if (detail_warn) {
-      detail_str = `${detail_str} Detail: ${line}`
-      //ErrList.push(line)
-      core.warning(detail_str)
-      detail_warn = false
+      core.setFailed(line)
       handled = true
     }
 
     if (probe_warning) {
-      //core.warning(line)
-      detail_str = line
-      detail_warn = true
+      core.warning(line)
       handled = true
     }
 
@@ -59,14 +35,10 @@ function CallBack(err: any, data: string, stderr: string): void {
       console.log(line)
     }
   }
-  //console.log(file_content)
 
   if (err) {
     if (Number(err.code) > 1) {
-      //core.setFailed('Build error')
-      // for (let err of ErrList) {
-      //   core.setFailed(err)
-      // }
+      console.log('Build finished with errors')
     }
   }
 
