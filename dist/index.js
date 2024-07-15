@@ -24796,20 +24796,26 @@ function CallBack(err, data, stderr) {
     const arr = file_content.split(/\r?\n/);
     // Read file line by line
     for (let line of arr) {
-        let regex = /[wW]arning:/g;
-        let probe = regex.exec(line);
-        if (probe) {
-            core.warning(line);
+        let regex_warning = /[wW]arning:/g;
+        let regex_error = /[eE]rror:/g;
+        let probe_warning = regex_warning.exec(line);
+        let probe_error = regex_error.exec(line);
+        let handled = false;
+        if (probe_error) {
+            core.setFailed(line);
+            handled = true;
         }
-        else {
+        if (probe_warning) {
+            core.warning(line);
+            handled = true;
+        }
+        if (!handled) {
             console.log(line);
         }
     }
-    //console.log(file_content)
     if (err) {
         if (Number(err.code) > 1) {
-            core.setFailed('Build process error output:');
-            core.setFailed(err.stack);
+            console.log('Build finished with errors');
         }
     }
     if (data) {

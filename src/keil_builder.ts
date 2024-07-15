@@ -15,21 +15,30 @@ function CallBack(err: any, data: string, stderr: string): void {
 
   // Read file line by line
   for (let line of arr) {
-    let regex = /[wW]arning:/g
-    let probe = regex.exec(line)
+    let regex_warning = /[wW]arning:/g
+    let regex_error = /[eE]rror:/g
+    let probe_warning = regex_warning.exec(line)
+    let probe_error = regex_error.exec(line)
+    let handled: boolean = false
 
-    if (probe) {
+    if (probe_error) {
+      core.setFailed(line)
+      handled = true
+    }
+
+    if (probe_warning) {
       core.warning(line)
-    } else {
+      handled = true
+    }
+
+    if (!handled) {
       console.log(line)
     }
   }
-  //console.log(file_content)
 
   if (err) {
     if (Number(err.code) > 1) {
-      core.setFailed('Build process error output:')
-      core.setFailed(err.stack)
+      console.log('Build finished with errors')
     }
   }
 
