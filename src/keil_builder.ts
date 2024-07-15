@@ -12,7 +12,7 @@ function CallBack(err: any, data: string, stderr: string): void {
   console.log('Build log:')
 
   const arr = file_content.split(/\r?\n/)
-  let ErrList: string[] = []
+  //let ErrList: string[] = []
 
   // Read file line by line
   for (let line of arr) {
@@ -22,7 +22,8 @@ function CallBack(err: any, data: string, stderr: string): void {
     let probe_error = regex_error.exec(line)
 
     if (probe_error) {
-      ErrList.push(line)
+      //ErrList.push(line)
+      core.setFailed(line)
     }
 
     if (probe_warning) {
@@ -35,9 +36,10 @@ function CallBack(err: any, data: string, stderr: string): void {
 
   if (err) {
     if (Number(err.code) > 1) {
-      for (let err of ErrList) {
-        core.setFailed(err)
-      }
+      core.setFailed('Build error')
+      // for (let err of ErrList) {
+      //   core.setFailed(err)
+      // }
     }
   }
 

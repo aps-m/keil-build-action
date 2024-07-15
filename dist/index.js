@@ -24794,7 +24794,7 @@ function CallBack(err, data, stderr) {
     const file_content = fs.readFileSync(`${LogDirName}/${LogFileName}`, 'utf-8');
     console.log('Build log:');
     const arr = file_content.split(/\r?\n/);
-    let ErrList = [];
+    //let ErrList: string[] = []
     // Read file line by line
     for (let line of arr) {
         let regex_warning = /[wW]arning:/g;
@@ -24802,7 +24802,8 @@ function CallBack(err, data, stderr) {
         let probe_warning = regex_warning.exec(line);
         let probe_error = regex_error.exec(line);
         if (probe_error) {
-            ErrList.push(line);
+            //ErrList.push(line)
+            core.setFailed(line);
         }
         if (probe_warning) {
             core.warning(line);
@@ -24814,9 +24815,10 @@ function CallBack(err, data, stderr) {
     //console.log(file_content)
     if (err) {
         if (Number(err.code) > 1) {
-            for (let err of ErrList) {
-                core.setFailed(err);
-            }
+            core.setFailed('Build error');
+            // for (let err of ErrList) {
+            //   core.setFailed(err)
+            // }
         }
     }
     if (data) {
