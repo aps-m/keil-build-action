@@ -13,7 +13,7 @@
 
 ## Пример использования
 
-```
+```yml
 - name: Build project
   uses: aps-m/keil-build-action@v1
   with:
