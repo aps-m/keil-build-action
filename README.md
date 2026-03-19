@@ -15,7 +15,7 @@
 
 ```yml
 - name: Build project
-  uses: aps-m/keil-build-action@v1
+  uses: aps-m/keil-build-action@v4
   with:
     project_name: 'MDK-ARM/Project.uvprojx'
     target_name: 'Debug'
