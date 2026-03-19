@@ -1,12 +1,21 @@
 import * as core from '@actions/core'
 import * as fs from 'fs'
 import * as path from 'path'
+import cmd from 'node-cmd'
 
 const KeilCompilerPath = 'C:\\Keil_v5\\UV4\\UV4.exe'
 const LogFileName = 'build_output.txt'
 let LogDirName = ''
 
-function CallBack(err: any, data: string, stderr: string): void {
+type CommandError = Error & {
+  code?: number | string
+}
+
+function CallBack(
+  err: CommandError | null,
+  data: string,
+  stderr: string
+): void {
   const file_content = fs.readFileSync(`${LogDirName}/${LogFileName}`, 'utf-8')
 
   console.log('Build log:')
@@ -14,12 +23,12 @@ function CallBack(err: any, data: string, stderr: string): void {
   const arr = file_content.split(/\r?\n/)
 
   // Read file line by line
-  for (let line of arr) {
-    let regex_warning = /[wW]arning:/g
-    let regex_error = /[eE]rror:/g
-    let probe_warning = regex_warning.exec(line)
-    let probe_error = regex_error.exec(line)
-    let handled: boolean = false
+  for (const line of arr) {
+    const regex_warning = /[wW]arning:/g
+    const regex_error = /[eE]rror:/g
+    const probe_warning = regex_warning.exec(line)
+    const probe_error = regex_error.exec(line)
+    let handled = false
 
     if (probe_error) {
       core.setFailed(line)
@@ -57,11 +66,9 @@ export function KeilBuildProject(
   project_name: string,
   target_name: string
 ): void {
-  const cmdShell = require('node-cmd')
-
   LogDirName = path.dirname(project_name)
 
-  let process_obj = cmdShell.run(
+  const process_obj = cmd.run(
     `${KeilCompilerPath} -j0 -cr ${project_name} -t ${target_name} -o ${LogFileName}`,
     CallBack
   )
