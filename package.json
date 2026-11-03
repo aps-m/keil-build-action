@@ -88,6 +88,9 @@
     "node-cmd": "^5.0.0"
   },
   "overrides": {
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.1"
+    },
     "@istanbuljs/load-nyc-config": {
       "js-yaml": "4.3.2"
     }
